@@ -27,13 +27,13 @@ class UserProfile(models.Model):
         null=True,
     )
 
-    # followers= models.ManyToManyField(
-    #     'self',
-    #     symmetrical=False,
-    #     related_name='following',
-    #     through='Follow',
-    #     verbose_name='Followers',
-    # )
+    followers= models.ManyToManyField(
+         'self',
+         symmetrical=False,
+         related_name='following',
+         through='Follow',
+         verbose_name='Followers',
+     )
 
     class Meta:    
         verbose_name = 'Perfiles'
@@ -41,3 +41,19 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.username
+    
+class Follow(models.Model):
+    follower = models.ForeignKey(UserProfile, verbose_name='¿Quien sigue?', on_delete=models.CASCADE, related_name='follower_set')
+    following = models.ForeignKey(UserProfile, verbose_name='¿A quién sigue?', on_delete=models.CASCADE, related_name='following_set')
+    created_at=models.DateTimeField(auto_now_add=True, verbose_name='¿Desde cuándo lo sigue?')
+
+    class Meta:
+       unique_together=('follower', 'following')
+       
+    def __str__(self):
+       return f"{self.follower} follows {self.following}"
+    
+    class Meta:    
+        verbose_name = 'Seguidor'
+        verbose_name_plural = 'Seguidores'
+   
