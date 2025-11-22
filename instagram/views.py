@@ -10,5 +10,5 @@ class Login(TemplateView):
 class Register(TemplateView):
     template_name = 'general/register.html'
 
-class Home(TemplateView):
-    template_name = 'general/legal.html'
+class Contact(TemplateView):
+    template_name = 'general/contact.html'
