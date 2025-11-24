@@ -31,6 +31,8 @@ INSTALLED_APPS = [
 
     'django_extensions',
     "debug_toolbar",
+    'crispy_forms',
+    'crispy_bootstrap5',
 
     'profiles',
     'posts',
@@ -124,3 +126,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
