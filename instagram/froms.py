@@ -13,9 +13,13 @@ class RegisterForm(forms.ModelForm):
             'password',   
         ]
 
-    def save(self, commit = ...):
+    def save(self, commit= True):
         user = super().save(commit=True)
         user.set_password(self.cleaned_data['password'])
         user.save()
 
         return user
+    
+class LoginForm(forms.Form):
+    username= forms.CharField(label='Email')
+    password=forms.CharField(label='Contraseña', widget=forms.PasswordInput)

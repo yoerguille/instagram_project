@@ -1,16 +1,37 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from django.views.generic import CreateView
+from django.views.generic import CreateView, FormView
 from django.contrib.auth.models import User
-from django.urls import reverse_lazy
-from .froms import RegisterForm
+from django.contrib.auth import authenticate, login, logout
+from django.urls import reverse_lazy, reverse
+from django.http import HttpResponseRedirect
+from .froms import RegisterForm, LoginForm
 from django.contrib import messages
 
 class Home(TemplateView):
     template_name = 'general/home.html'
 
-class Login(TemplateView):
+class Login(FormView):
     template_name = 'general/login.html'
+    form_class= LoginForm
+
+    def form_valid(self, form):
+        usuario = form.cleaned_data.get('username')
+        contraseña = form.cleaned_data.get('password')
+        user = authenticate(username=usuario, password=contraseña)
+    
+        if user is not None:
+            login(self.request, user)
+            messages.add_message(self.request, messages.SUCCESS, f"Bienvenido de nuevo {user.username}")
+            return HttpResponseRedirect(reverse('home'))
+        else:
+            messages.add_message(self.request, messages.ERROR, f"Usuario o contraseña incorrectas")
+            return super(Login, self).form_invalid(form)
+
+def logout_view(request):
+    logout(request)
+    messages.add_message(request, messages.SUCCESS, f"Cerrado sesión correctamente")
+    return HttpResponseRedirect(reverse('home'))
 
 class UserRegisterView(CreateView):
     model = User

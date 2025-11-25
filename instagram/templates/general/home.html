@@ -2,8 +2,10 @@
 
 {% block head_title %} Bienvenido a la Home {% endblock %}
 
-{% block page_content %}    
-
-    <h1>{% block h1 %}Este es la Home{% endblock %}</h1>
-
+{% block page_content %}
+    <div class="container">
+        {% include "_includes/_messages.html" %}
+        <h1>Bienvenido a la página de Inicio</h1>
+        <p>Aqui va el contenido de Inicio</p>
+    </div>
 {% endblock %}
