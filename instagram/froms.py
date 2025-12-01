@@ -1,6 +1,7 @@
 from django.forms import ModelForm
 from django import forms
 from django.contrib.auth.models import User
+from posts.models import Post
 
 class RegisterForm(forms.ModelForm):
     password=forms.CharField(widget=forms.PasswordInput)
@@ -26,3 +27,12 @@ class RegisterForm(forms.ModelForm):
 class LoginForm(forms.Form):
     username= forms.CharField(label='Email')
     password=forms.CharField(label='Contraseña', widget=forms.PasswordInput)
+
+class CreatePostForm(forms.ModelForm):
+    class Meta:
+        model= Post
+        fields = [
+            'image',
+            'caption',  
+        ]
+

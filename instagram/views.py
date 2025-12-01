@@ -8,6 +8,8 @@ from django.http import HttpResponseRedirect
 from .froms import RegisterForm, LoginForm
 from django.contrib import messages
 from profiles.models import UserProfile
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 class Home(TemplateView):
     template_name = 'general/home.html'
@@ -48,10 +50,12 @@ class UserRegisterView(CreateView):
 class Contact(TemplateView):
     template_name = 'general/contact.html'
 
+@method_decorator(login_required, name='dispatch')
 class ProfileDetail(DetailView):
     model = UserProfile
     template_name = 'general/profile_detail.html'
 
+@method_decorator(login_required, name='dispatch')
 class ProfileUpdate(UpdateView):
     model = UserProfile
     template_name = 'general/profile_update.html'
