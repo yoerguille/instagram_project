@@ -10,9 +10,17 @@ from django.contrib import messages
 from profiles.models import UserProfile
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from posts.models import Post
 
 class Home(TemplateView):
     template_name = 'general/home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        all_posts = Post.objects.all().order_by('created_at')[:5]
+        context["all_posts"] = all_posts
+        return context
+    
 
 class Login(FormView):
     template_name = 'general/login.html'

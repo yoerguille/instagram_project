@@ -6,6 +6,9 @@
     <div class="container">
         {% include "_includes/_messages.html" %}
         <h1>Bienvenido a la página de Inicio</h1>
-        <p>Aqui va el contenido de Inicio</p>
+        {% for post in all_posts %}
+            {% include "_includes/_posts/_posts.html" %}
+            <hr class="hr" />
+        {% endfor %}
     </div>
 {% endblock %}

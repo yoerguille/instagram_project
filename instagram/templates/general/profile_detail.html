@@ -14,9 +14,17 @@
         {% else %}
             <p>No tiene foto de perfil</p>
         {% endif %}
-
         <p><a href="{% url 'profile_update' object.pk %}">Editar</a></p>
+
+        <section>
+            {% for post in object.user.posts.all %}
+            {% include "_includes/_posts/_posts.html" %}
+            <hr class="hr" />
+            {% endfor %}
+        </section>
+
     </div>
+    
 
         
 
