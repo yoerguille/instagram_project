@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, DetailView, UpdateView
+from django.views.generic import TemplateView, DetailView, UpdateView, ListView
 from django.views.generic import CreateView, FormView
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -58,10 +58,14 @@ class UserRegisterView(CreateView):
 class Contact(TemplateView):
     template_name = 'general/contact.html'
 
-@method_decorator(login_required, name='dispatch')
 class ProfileDetail(DetailView):
     model = UserProfile
     template_name = 'general/profile_detail.html'
+
+class ProfileList(ListView):
+    model = UserProfile
+    template_name = 'general/profile_list.html'
+    context_object_name = 'profiles'
 
 @method_decorator(login_required, name='dispatch')
 class ProfileUpdate(UpdateView):
@@ -80,3 +84,9 @@ class ProfileUpdate(UpdateView):
 
     def get_success_url(self):
         return reverse('profile_detail', args=[self.object.pk])
+    
+    def dispatch(self, request, *args, **kwargs):
+        user_profile = self.get_object()
+        if user_profile.user != request.user:
+            return HttpResponseRedirect(reverse('home'))
+        return super().dispatch(request, *args, **kwargs)

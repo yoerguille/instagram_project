@@ -5,10 +5,20 @@
 {% block page_content %}
     <div class="container">
         {% include "_includes/_messages.html" %}
-        <h1>Bienvenido a la página de Inicio</h1>
-        {% for post in all_posts %}
-            {% include "_includes/_posts/_posts.html" %}
-            <hr class="hr" />
-        {% endfor %}
+
+        <section>
+            <h1>Bienvenido a la página de Inicio</h1>
+
+            <div class="row">
+                {% for post in all_posts %}
+                <div class="col-12 col-sm-6 col-md-4">
+                    {% include "_includes/_posts/_posts.html" %}
+                </div>
+                {% endfor %}
+            </div>
+            
+        </section>
+        
     </div>
 {% endblock %}
+
