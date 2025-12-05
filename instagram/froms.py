@@ -2,6 +2,7 @@ from django.forms import ModelForm
 from django import forms
 from django.contrib.auth.models import User
 from posts.models import Post
+from profiles.models import UserProfile
 
 class RegisterForm(forms.ModelForm):
     password=forms.CharField(widget=forms.PasswordInput)
@@ -36,3 +37,5 @@ class CreatePostForm(forms.ModelForm):
             'caption',  
         ]
 
+class FollowForm(forms.Form):
+    profile_pk = forms.IntegerField(widget=forms.HiddenInput())

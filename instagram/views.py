@@ -5,12 +5,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponseRedirect
-from .froms import RegisterForm, LoginForm
+from .froms import RegisterForm, LoginForm, FollowForm
 from django.contrib import messages
 from profiles.models import UserProfile
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from posts.models import Post
+from profiles.models import UserProfile
 
 class Home(TemplateView):
     template_name = 'general/home.html'
@@ -58,14 +59,32 @@ class UserRegisterView(CreateView):
 class Contact(TemplateView):
     template_name = 'general/contact.html'
 
-class ProfileDetail(DetailView):
+class ProfileDetail(DetailView, FormView):
     model = UserProfile
     template_name = 'general/profile_detail.html'
+    form_class = FollowForm
+
+    def form_valid(self, form):
+        profile_pk = form.cleaned_data.get('profile_pk')
+        profile = UserProfile.objects.get(pk=profile_pk)
+        self.request.user.profile.follow(profile)
+       
+        messages.add_message(self.request, messages.SUCCESS, f"Usuario seguido correctamente")
+        return HttpResponseRedirect(reverse('profile_detail', args=[self.request.user.profile.pk]))
+        
+    
 
 class ProfileList(ListView):
     model = UserProfile
     template_name = 'general/profile_list.html'
     context_object_name = 'profiles'
+
+    def get_queryset(self):
+
+        return UserProfile.objects.all().exclude(user=self.request.user)
+        
+        
+    
 
 @method_decorator(login_required, name='dispatch')
 class ProfileUpdate(UpdateView):

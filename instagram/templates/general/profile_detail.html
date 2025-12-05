@@ -9,6 +9,18 @@
         <p>Biografía {{object.biografia|default_if_none:"Sin rellenar"}}</p>
         <p>Cumpleaños {{object.birth_date|default_if_none:"Sin rellenar"}}</p>
         <p>Seguidores {{object.followers.count|default_if_none:"Sin rellenar"}}</p>
+        {% if profile not in request.user.profile.follower_set.all %}
+            <p>No lo estoy siguiendo</p>
+            <p>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="profile_pk" value="{{ object.pk }}">
+                    <button>Seguir</button>
+                </form>
+            </p>
+             
+        {% endif %}
+        
         {% if object.profile_img %}
             <img src="{{ object.profile_img.url }}" alt="" width=200>
         {% else %}
@@ -17,6 +29,7 @@
         {% if object.user == request.user %}
             <p><a href="{% url 'profile_update' object.pk %}">Editar</a></p>
         {% endif %}
+        
         
 
         <section>
